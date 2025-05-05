@@ -1,5 +1,5 @@
 # TPGammaL3 pour simulations du TP de L3 sur le rayonnement gamma.
-[Adresse Isakha]
+[isakh.diebate9@gmail.com]
 [huber@lp2ib.in2p3.fr, huberarnaud@gmail.com]
 
 ## INSTRUCTIONS TO USE THE SIMULATION
@@ -38,7 +38,9 @@ Personnaly, I used the vrml.mac but you can create another one. Just to remember
 - An TPGammaL3Sim.cfg file is located in bin directory. All the dimensions necessary are in this file to avoid recompilation when you want to change some parameters. If you add some other dimensions, don't forget to add the variables in Geometry.cc.
 ```
 #----------Common variables----------
-Radius_cylinder_internal 7 mm
+Radius_NaI 25.4 mm
+Thickness_NaI 50.8 mm
+Thickness_Housing 0.508 mm
 ```
 
 - Some materials are already defined in the simulation. If you need a new one, you must declare it in the TPGammaL3SimGeometry.cc and precisely on the con construction part of interest. If the material is already in the NIST Database, you can copy the declaration and modifiy the declaration to create a new material. If not, it is advice to declare it in the TPGammaL3SimMaterials.cc in order to clarify the code. After that, DO NOT FORGET to add the declaration of your new material in the ConstructMaterialsList() function in TPGammaL3SimGeometry.cc file. It is NECESSARY if you want to have the conversion of your material name given in the configuration file and the link with the G4Material associated.

@@ -53,16 +53,28 @@ Geometry::Geometry(G4String buildfile)
       if (!config.good())
         break;
       // ####################### COMMON variables ###########################
-      if (variable == "Radius_cylinder_internal")
+      if (variable == "Radius_NaI")
       {
         config >> value >> unit;
-        Radius_cylinder_internal = value * G4UnitDefinition::GetValueOf(unit);
+        Radius_NaI = value * G4UnitDefinition::GetValueOf(unit);
+      }      
+      else if (variable == "Thickness_NaI")
+      {
+        config >> value >> unit;
+        Thickness_NaI = value * G4UnitDefinition::GetValueOf(unit);
+      }      
+      else if (variable == "Thickness_Housing")
+      {
+        config >> value >> unit;
+        Thickness_Housing = value * G4UnitDefinition::GetValueOf(unit);
       }      
     }
   }
   config.close();
 
-  G4cout << "\n Radius_cylinder_internal = " << Radius_cylinder_internal
+  G4cout << "\n Radius_NaI = " << Radius_NaI
+         << "\n Thickness NaI = " << Thickness_NaI 
+         << "\n Thickness Housing = " << Thickness_Housing 
          << "\n " << G4endl;
 }
 // ***********************
@@ -71,10 +83,10 @@ Geometry::Geometry(G4String buildfile)
 Geometry::~Geometry()
 {}
 
-G4LogicalVolume *Geometry::GetNaIVolume(G4String name, G4double Radius, G4double Thickness, G4Material *Material)
+G4LogicalVolume *Geometry::GetCylinderVolume(G4String name, G4double InternalRadius, G4double ExternalRadius, G4double Thickness, G4Material *Material)
 {
 
-  auto solid = new G4Tubs("solid_"+name, 0., Radius, (Thickness / 2) * mm, 0., 360. * deg);
+  auto solid = new G4Tubs("solid_"+name, InternalRadius, ExternalRadius, (Thickness / 2) * mm, 0., 360. * deg);
   auto LogicalVolume = new G4LogicalVolume(solid, Material, "logical_"+name);
 
   return LogicalVolume;

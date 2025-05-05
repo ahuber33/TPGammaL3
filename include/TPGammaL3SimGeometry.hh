@@ -26,8 +26,11 @@ public:
   void SetLogicalVolumeColor(G4LogicalVolume*, G4String);
   void ConstructWorld();
   void ConstructNaI();
+  void ConstructHousing();
   void GetVariables();
-  G4double GetRadiusCylinderInternal() { return Radius_cylinder_internal; }
+  G4double GetRadiusNaI() { return Radius_NaI; }
+  G4double GetThicknessNaI() { return Thickness_NaI; }
+  G4double GetThicknessHousing() { return Thickness_Housing; }
   
 
 private:
@@ -53,15 +56,9 @@ private:
 
   // Physical volumes
   G4VPhysicalVolume *PhysicalWorld=nullptr;
-
-  G4Material* NaI;
-  G4Material* Cuivre;
-  G4Material* Etain;
-  G4Material* Plomb;
-  G4Material* Titane;
-  G4Material* Fer;
-  G4Material* Tantale;
   
-  G4double Radius_cylinder_internal=0.0;
+  G4double Radius_NaI=0.0;
+  G4double Thickness_NaI=0.0;
+  G4double Thickness_Housing=0.0;
 };
 #endif

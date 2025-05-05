@@ -36,9 +36,11 @@ public:
   //  void Construct();
 
 public:
-  G4LogicalVolume *GetNaIVolume(G4String, G4double, G4double, G4Material*);
+  G4LogicalVolume *GetCylinderVolume(G4String, G4double, G4double, G4double, G4Material*);
   
-  G4double GetRadiusCylinderInternal(){return Radius_cylinder_internal;}
+  G4double GetRadiusNaI(){return Radius_NaI;}
+  G4double GetThicknessNaI(){return Thickness_NaI;}
+  G4double GetThicknessHousing(){return Thickness_Housing;}
 
 
 
@@ -50,7 +52,9 @@ private:
   // Logical Volumes
   G4LogicalVolume *LogicalVolume;
 
-  G4double Radius_cylinder_internal=0.0;
+  G4double Radius_NaI=0.0;
+  G4double Thickness_NaI=0.0;
+  G4double Thickness_Housing=0.0;
   // Other
   G4VisAttributes *clear;
 

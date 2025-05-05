@@ -3,6 +3,7 @@
 //// Copyright: 2022 (C) Projet RATP - ENL [LP2IB] - CELIA
 
 #include "TPGammaL3SimPhysics.hh"
+#include "G4NuclideTable.hh"
 
 using namespace CLHEP;
 

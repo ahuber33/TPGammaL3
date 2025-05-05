@@ -127,9 +127,9 @@ void TPGammaL3SimGeometry::ConstructWorld()
   DontRotate.rotateZ(0 * deg);
   DontRotate.rotateX(0 * deg);
 
-  auto Material = G4NistManager::Instance()->FindOrBuildMaterial("G4_Galactic");
+  auto Material = G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR");
 
-  auto SolidWorld = new G4Box("SolidWorld", 110 * cm, 110 * cm, 110 * cm);
+  auto SolidWorld = new G4Box("SolidWorld", 50 * cm, 50 * cm, 50 * cm);
   LogicalWorld = new G4LogicalVolume(SolidWorld, Material, "LogicalWorld", 0, 0, 0);
 
   // Place the world volume: center of world at origin (0,0,0)
@@ -147,13 +147,13 @@ void TPGammaL3SimGeometry::ConstructNaI()
   // Alu = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
   // Cuivre = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu");
   // Etain = G4NistManager::Instance()->FindOrBuildMaterial("G4_Sn");
-  Plomb = G4NistManager::Instance()->FindOrBuildMaterial("G4_Pb");
+  // Plomb = G4NistManager::Instance()->FindOrBuildMaterial("G4_Pb");
   // Titane = G4NistManager::Instance()->FindOrBuildMaterial("G4_Ti");
   // Fer = G4NistManager::Instance()->FindOrBuildMaterial("G4_Fe");
   // Tantale = G4NistManager::Instance()->FindOrBuildMaterial("G4_Ta");
 
 
-  auto LogicalNaI = Geom->GetNaIVolume("NaI", 10, 30, NaI);
+  auto LogicalNaI = Geom->GetCylinderVolume("NaI", 0, Radius_NaI, Thickness_NaI, NaI);
   
   SetLogicalVolumeColor(LogicalNaI, "yellow");
 
@@ -169,6 +169,44 @@ void TPGammaL3SimGeometry::ConstructNaI()
 }
 
 
+void TPGammaL3SimGeometry::ConstructHousing()
+{
+  G4RotationMatrix *stack_rot = new G4RotationMatrix;
+  // G4double theta = -12*deg;
+  stack_rot->rotateZ(0 * deg);
+  stack_rot->rotateX(0 * deg);
+
+  auto Alu = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
+
+  auto LogicalHousing1 = Geom->GetCylinderVolume("LateralHousing", Radius_NaI+0.1, (Radius_NaI+0.1)+Thickness_Housing, Thickness_NaI, Alu);
+
+  auto LogicalHousing2 = Geom->GetCylinderVolume("FrontHousing", 0, (Radius_NaI+0.1)+Thickness_Housing, Thickness_Housing, Alu);
+  
+  SetLogicalVolumeColor(LogicalHousing1, "gray");
+  SetLogicalVolumeColor(LogicalHousing2, "gray");
+
+  
+  auto physiHousing1 = new G4PVPlacement(stack_rot,                               // no rotation
+                                               G4ThreeVector(0, 0,0), // position
+                                               LogicalHousing1,                    // its logical volume
+                                               "LateralHousing",
+                                               LogicalWorld, // its mother  volume
+                                               false,        // no boolean operations
+                                               0,
+                                               false);
+
+
+  auto physiHousing2 = new G4PVPlacement(stack_rot,                               // no rotation
+                                              G4ThreeVector(0, 0, 0. -Thickness_NaI/2 -Thickness_Housing/2), // position
+                                              LogicalHousing2,                    // its logical volume
+                                              "FrontHousing",
+                                              LogicalWorld, // its mother  volume
+                                              false,        // no boolean operations
+                                              0,
+                                              false);                                               
+}
+
+
 void TPGammaL3SimGeometry::GetVariables()
 {
   // Initialize scint classes
@@ -177,7 +215,9 @@ void TPGammaL3SimGeometry::GetVariables()
   // ***********************
   // Various dimensions
   // ***********************
-  Radius_cylinder_internal = Geom->GetRadiusCylinderInternal();
+  Radius_NaI = Geom->GetRadiusNaI();
+  Thickness_NaI = Geom->GetThicknessNaI();
+  Thickness_Housing = Geom->GetThicknessHousing();
 }
 
 // Main Function: Builds Full block, coupling, and PMT geometries
@@ -187,6 +227,7 @@ G4VPhysicalVolume *TPGammaL3SimGeometry::Construct()
 
   ConstructWorld();
   ConstructNaI();
+  ConstructHousing();
 
   // Returns world with everything in it and all properties set
   return PhysicalWorld;

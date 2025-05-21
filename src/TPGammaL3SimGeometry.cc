@@ -129,7 +129,7 @@ void TPGammaL3SimGeometry::ConstructWorld()
 
   auto Material = G4NistManager::Instance()->FindOrBuildMaterial("G4_AIR");
 
-  auto SolidWorld = new G4Box("SolidWorld", 50 * cm, 50 * cm, 50 * cm);
+  auto SolidWorld = new G4Box("SolidWorld", 200 * cm, 200 * cm, 200 * cm);
   LogicalWorld = new G4LogicalVolume(SolidWorld, Material, "LogicalWorld", 0, 0, 0);
 
   // Place the world volume: center of world at origin (0,0,0)
@@ -159,9 +159,41 @@ void TPGammaL3SimGeometry::ConstructNaI()
 
   
   auto physiNaI = new G4PVPlacement(stack_rot,                               // no rotation
-                                               G4ThreeVector(0, 0, 0), // position
+                                               G4ThreeVector(0, 0, 25.908), // position
                                                LogicalNaI,                    // its logical volume
                                                "NaI",
+                                               LogicalWorld, // its mother  volume
+                                               false,        // no boolean operations
+                                               0,
+                                               false);
+}
+
+
+void TPGammaL3SimGeometry::ConstructAbsorber()
+{
+  G4RotationMatrix *stack_rot = new G4RotationMatrix;
+  // G4double theta = -12*deg;
+  stack_rot->rotateZ(0 * deg);
+  stack_rot->rotateX(0 * deg);
+
+  auto Material = G4NistManager::Instance()->FindOrBuildMaterial("G4_Al");
+  // Cuivre = G4NistManager::Instance()->FindOrBuildMaterial("G4_Cu");
+  // Etain = G4NistManager::Instance()->FindOrBuildMaterial("G4_Sn");
+  // Plomb = G4NistManager::Instance()->FindOrBuildMaterial("G4_Pb");
+  // Titane = G4NistManager::Instance()->FindOrBuildMaterial("G4_Ti");
+  // Fer = G4NistManager::Instance()->FindOrBuildMaterial("G4_Fe");
+  // Tantale = G4NistManager::Instance()->FindOrBuildMaterial("G4_Ta");
+
+
+  auto Logical = Geom->GetBoxVolume("Absorber", 50, 50, Thickness_Absorber, Material);
+  
+  SetLogicalVolumeColor(Logical, "cyan");
+
+  
+  auto physi = new G4PVPlacement(stack_rot,                               // no rotation
+                                               G4ThreeVector(0, 0, -100+Thickness_Absorber/2), // position
+                                               Logical,                    // its logical volume
+                                               "Absorber",
                                                LogicalWorld, // its mother  volume
                                                false,        // no boolean operations
                                                0,
@@ -187,7 +219,7 @@ void TPGammaL3SimGeometry::ConstructHousing()
 
   
   auto physiHousing1 = new G4PVPlacement(stack_rot,                               // no rotation
-                                               G4ThreeVector(0, 0,0), // position
+                                               G4ThreeVector(0, 0, 25.908), // position
                                                LogicalHousing1,                    // its logical volume
                                                "LateralHousing",
                                                LogicalWorld, // its mother  volume
@@ -197,7 +229,7 @@ void TPGammaL3SimGeometry::ConstructHousing()
 
 
   auto physiHousing2 = new G4PVPlacement(stack_rot,                               // no rotation
-                                              G4ThreeVector(0, 0, 0. -Thickness_NaI/2 -Thickness_Housing/2), // position
+                                              G4ThreeVector(0, 0, 0. -Thickness_NaI/2 -Thickness_Housing/2 +25.908), // position
                                               LogicalHousing2,                    // its logical volume
                                               "FrontHousing",
                                               LogicalWorld, // its mother  volume
@@ -218,6 +250,7 @@ void TPGammaL3SimGeometry::GetVariables()
   Radius_NaI = Geom->GetRadiusNaI();
   Thickness_NaI = Geom->GetThicknessNaI();
   Thickness_Housing = Geom->GetThicknessHousing();
+  Thickness_Absorber = Geom->GetThicknessAbsorber();
 }
 
 // Main Function: Builds Full block, coupling, and PMT geometries
@@ -228,6 +261,7 @@ G4VPhysicalVolume *TPGammaL3SimGeometry::Construct()
   ConstructWorld();
   ConstructNaI();
   ConstructHousing();
+  if(Thickness_Absorber >0) ConstructAbsorber();
 
   // Returns world with everything in it and all properties set
   return PhysicalWorld;

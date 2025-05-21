@@ -37,10 +37,12 @@ public:
 
 public:
   G4LogicalVolume *GetCylinderVolume(G4String, G4double, G4double, G4double, G4Material*);
+  G4LogicalVolume *GetBoxVolume(G4String, G4double, G4double, G4double, G4Material*);
   
   G4double GetRadiusNaI(){return Radius_NaI;}
   G4double GetThicknessNaI(){return Thickness_NaI;}
   G4double GetThicknessHousing(){return Thickness_Housing;}
+  G4double GetThicknessAbsorber(){return Thickness_Absorber;}
 
 
 
@@ -55,6 +57,7 @@ private:
   G4double Radius_NaI=0.0;
   G4double Thickness_NaI=0.0;
   G4double Thickness_Housing=0.0;
+  G4double Thickness_Absorber=0.0;
   // Other
   G4VisAttributes *clear;
 

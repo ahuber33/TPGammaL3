@@ -18,7 +18,7 @@ struct RunTally
 {
   float IncidentE;
   float Edep;
-  //std::vector<float> EBremCreation;
+  std::vector<float> EGammaCreation;
 
   inline int operator==(const RunTally &right) const
   {
@@ -38,6 +38,7 @@ public:
   void SetTrackingID(G4int Track_ID, G4String PartName);
   void SetIncidentE(G4double a) { Statistics.IncidentE = a; }
   void AddEdep(G4double a) { Statistics.Edep += a; }
+  void FillEGammaCreation(G4double a) {Statistics.EGammaCreation.push_back(a);}
 
 private:
   TTree *EventTree;

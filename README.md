@@ -6,7 +6,7 @@
 - Download the VMWare [Geant4.11.2.1](https://heberge.lp2ib.in2p3.fr/G4VM/index.html)
 
 ```
-git clone https://github.com/ahuber33/TPGammaL3_Simulation
+git clone https://github.com/ahuber33/TPGammaL3
 ```
 
 - Go to build Folder and use this command :

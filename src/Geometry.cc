@@ -68,6 +68,11 @@ Geometry::Geometry(G4String buildfile)
         config >> value >> unit;
         Thickness_Housing = value * G4UnitDefinition::GetValueOf(unit);
       }      
+      else if (variable == "Thickness_Absorber")
+      {
+        config >> value >> unit;
+        Thickness_Absorber = value * G4UnitDefinition::GetValueOf(unit);
+      }      
     }
   }
   config.close();
@@ -75,6 +80,7 @@ Geometry::Geometry(G4String buildfile)
   G4cout << "\n Radius_NaI = " << Radius_NaI
          << "\n Thickness NaI = " << Thickness_NaI 
          << "\n Thickness Housing = " << Thickness_Housing 
+         << "\n Thickness Absorber = " << Thickness_Absorber 
          << "\n " << G4endl;
 }
 // ***********************
@@ -92,3 +98,11 @@ G4LogicalVolume *Geometry::GetCylinderVolume(G4String name, G4double InternalRad
   return LogicalVolume;
 }
 
+G4LogicalVolume *Geometry::GetBoxVolume(G4String name, G4double x, G4double y, G4double z, G4Material *Material)
+{
+
+  auto solid = new G4Box("solid_"+name, x/2, y/2, z/2);
+  auto LogicalVolume = new G4LogicalVolume(solid, Material, "logical_"+name);
+
+  return LogicalVolume;
+}

@@ -27,10 +27,8 @@ public:
   void ConstructWorld();
   void ConstructNaI();
   void ConstructHousing();
+  void ConstructAbsorber();
   void GetVariables();
-  G4double GetRadiusNaI() { return Radius_NaI; }
-  G4double GetThicknessNaI() { return Thickness_NaI; }
-  G4double GetThicknessHousing() { return Thickness_Housing; }
   
 
 private:
@@ -60,5 +58,6 @@ private:
   G4double Radius_NaI=0.0;
   G4double Thickness_NaI=0.0;
   G4double Thickness_Housing=0.0;
+  G4double Thickness_Absorber=0.0;
 };
 #endif

@@ -37,6 +37,16 @@ void TPGammaL3SimSteppingAction::UserSteppingAction(const G4Step *aStep)
   z = aStep->GetTrack()->GetPosition().z();
   Edep = aStep->GetTotalEnergyDeposit() / keV;
   Energy = track->GetKineticEnergy() / MeV;
+  //auto creatorProcessName = track->GetCreatorProcess()->GetProcessName();
+
+  if(Parent_ID >0 && StepNo ==1 && PartName == "gamma")
+  {
+    if(track->GetCreatorProcess()->GetProcessName() =="Radioactivation" || track->GetCreatorProcess()->GetProcessName() =="annihil")
+    {
+      eventaction->FillEGammaCreation(aStep->GetPreStepPoint()->GetKineticEnergy()/keV);
+      //G4cout << "E creation gamma = " << aStep->GetPreStepPoint()->GetKineticEnergy()/keV << G4endl;
+    }
+  }
 
   
   if (Parent_ID == 0 && StepNo == 1) eventaction->SetIncidentE(aStep->GetPreStepPoint()->GetKineticEnergy() / keV);
@@ -44,7 +54,7 @@ void TPGammaL3SimSteppingAction::UserSteppingAction(const G4Step *aStep)
   if(PreVolumName =="NaI") 
   {
     eventaction->AddEdep(Edep);
-    G4cout << "Edep = " << Edep << G4endl;
+    //G4cout << "Edep = " << Edep << G4endl;
   }
 }
   

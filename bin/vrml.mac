@@ -1,8 +1,9 @@
-/tracking/verbose 1
+/tracking/verbose 0
 /run/verbose 1
 /run/printProgress 100000
 
 /run/initialize
+/process/had/rdm/thresholdForVeryLongDecayTime 1.0e+60 year
 
 
 
@@ -11,7 +12,7 @@
 ### PART TO SIMULATE PARTICLE WITH GPS (no setgun) ###
 ######################################################
 /gps/number 1
-/gps/particle gamma
+#/gps/particle gamma
 
 #/gps/ene/type Brem
 #/gps/ene/temp 1740678751 K
@@ -33,7 +34,7 @@
 /gps/pos/centre 0.0 0.0 -300 mm
 /gps/direction 0.0 0.0 1.0
 /gps/pos/radius 25 mm
-#/gps/energy 90000 keV
+/gps/energy 0 keV
 
 #/gps/particle geantino
 #/gps/pos/type Plane
@@ -62,11 +63,11 @@
 #/gps/ene/intercept 1
 
 
-/gps/ene/type Arb
-/gps/hist/type arb
-/gps/hist/file spectra/spectrum_6.txt
-/gps/hist/inter Exp
+#/gps/ene/type Arb
+#/gps/hist/type arb
+#/gps/hist/file spectra/spectrum_6.txt
+#/gps/hist/inter Exp
 
-#/gps/particle ion
-#/gps/ion 11 22 0 0  
+/gps/particle ion
+/gps/ion 55 137 0 0  
 #/grdm/nucleusLimits 60 60 27 27

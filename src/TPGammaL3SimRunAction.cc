@@ -39,6 +39,7 @@ void TPGammaL3SimRunAction::CreateROOTFile(G4String suffixe)
   // Be careful of the data structure here!  /F is a float  /I is an integer
   RunBranch = NaI->Branch("IncidentE", &Stats.IncidentE, "IncidentE/F");
   RunBranch = NaI->Branch("Edep", &Stats.Edep, "Edep/F");
+  RunBranch = NaI->Branch("EGammaCreation", "vector<float>" , &Stats.EGammaCreation);
   
 }
 
@@ -164,7 +165,7 @@ void TPGammaL3SimRunAction::EndOfRunAction(const G4Run *aRun)
 
 void TPGammaL3SimRunAction::UpdateStatistics(RunTally aRunTally)
 {
-  //G4AutoLock lock(&fileMutex); // Verrouillage automatique du mutex
+  G4AutoLock lock(&fileMutex); // Verrouillage automatique du mutex
   Stats = aRunTally;
   NaI->Fill();
 }
